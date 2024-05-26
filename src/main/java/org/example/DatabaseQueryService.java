@@ -4,10 +4,7 @@ import org.example.db.Database;
 import org.example.entity.*;
 import org.example.utils.SqlFileLoader;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,10 +16,10 @@ public class DatabaseQueryService {
     public List<LongestProject> findLongestProjects() {
         List<LongestProject> longestProjectList = new ArrayList<>();
 
-        try (Statement stm = DB_CONN.createStatement()) {
-            String sql = SqlFileLoader.loadSQL("sql/find_longest_project.sql");
+        String sql = SqlFileLoader.loadSQL("sql/find_longest_project.sql");
 
-            ResultSet rs = stm.executeQuery(sql);
+        try (PreparedStatement ps = DB_CONN.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 LongestProject longestProject = new LongestProject(rs.getString("name"),
                         rs.getInt("month_count"));
@@ -39,10 +36,10 @@ public class DatabaseQueryService {
     public List<MaxProjectCountClient> findMaxProjectsClient() {
         List<MaxProjectCountClient> maxProjectsList = new ArrayList<>();
 
-        try (Statement stm = DB_CONN.createStatement()) {
-            String sql = SqlFileLoader.loadSQL("sql/find_max_projects_client.sql");
+        String sql = SqlFileLoader.loadSQL("sql/find_max_projects_client.sql");
 
-            ResultSet rs = stm.executeQuery(sql);
+        try (PreparedStatement ps = DB_CONN.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 MaxProjectCountClient maxProjectCountClient = new MaxProjectCountClient(rs.getString("name"),
                         rs.getInt("project_count"));
@@ -59,10 +56,10 @@ public class DatabaseQueryService {
     public List<MaxWorkerSalary> findMaxWorkerSalary() {
         List<MaxWorkerSalary> maxWorkersSalaryList = new ArrayList<>();
 
-        try (Statement stm = DB_CONN.createStatement()) {
-            String sql = SqlFileLoader.loadSQL("sql/find_max_salary_worker.sql");
+        String sql = SqlFileLoader.loadSQL("sql/find_max_salary_worker.sql");
 
-            ResultSet rs = stm.executeQuery(sql);
+        try (PreparedStatement ps = DB_CONN.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 MaxWorkerSalary maxWorkerSalary = new MaxWorkerSalary(rs.getString("name"),
                         rs.getInt("salary"));
@@ -79,10 +76,10 @@ public class DatabaseQueryService {
     public List<WorkerBirthday> findYoungestEldestWorkers() {
         List<WorkerBirthday> yeWorkersList = new ArrayList<>();
 
-        try (Statement stm = DB_CONN.createStatement()) {
-            String sql = SqlFileLoader.loadSQL("sql/find_youngest_eldest_workers.sql");
+        String sql = SqlFileLoader.loadSQL("sql/find_youngest_eldest_workers.sql");
 
-            ResultSet rs = stm.executeQuery(sql);
+        try (PreparedStatement ps = DB_CONN.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 WorkerBirthday yeWorker = new WorkerBirthday(
                         rs.getString("type"),
@@ -101,10 +98,10 @@ public class DatabaseQueryService {
     public List<ProjectPrice> getProjectPrices() {
         List<ProjectPrice> projectPricesList = new ArrayList<>();
 
-        try (Statement stm = DB_CONN.createStatement()) {
-            String sql = SqlFileLoader.loadSQL("sql/print_project_prices.sql");
+        String sql = SqlFileLoader.loadSQL("sql/print_project_prices.sql");
 
-            ResultSet rs = stm.executeQuery(sql);
+        try (PreparedStatement ps = DB_CONN.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 ProjectPrice projectPrice = new ProjectPrice(rs.getString("name"),
                         rs.getInt("price"));
